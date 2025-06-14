@@ -1,0 +1,78 @@
+import java.util.Scanner;
+import java.util.Random;
+
+public class NumberGuessingGame {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        int lowerBound = 1;
+        int upperBound = 100;
+        int maxAttempts = 7;
+        int score = 0;
+        int roundsPlayed = 0;
+        String playAgain;
+
+        System.out.println(" Welcome to the Number Guessing Game!");
+
+        do {
+            int secretNumber = random.nextInt(upperBound - lowerBound + 1) + lowerBound;
+            int attemptsLeft = maxAttempts;
+            roundsPlayed++;
+
+            System.out.println("\nRound " + roundsPlayed);
+            System.out.println("I'm thinking of a number between " + lowerBound + " and " + upperBound + ".");
+            System.out.println("You have " + maxAttempts + " attempts to guess it.");
+
+            boolean guessedCorrectly = false;
+
+            while (attemptsLeft > 0) {
+                System.out.print("Enter your guess: ");
+                
+                if (!scanner.hasNextInt()) {
+                    System.out.println("❗ Invalid input. Please enter a number.");
+                    scanner.next(); // clear invalid input
+                    continue;
+                }
+
+                int guess = scanner.nextInt();
+
+                if (guess < lowerBound || guess > upperBound) {
+                    System.out.println("⚠ Guess must be between " + lowerBound + " and " + upperBound + ".");
+                    continue;
+                }
+
+                if (guess == secretNumber) {
+                    System.out.println("🎉 Correct! You've guessed the number!");
+                    score++;
+                    guessedCorrectly = true;
+                    break;
+                } else if (guess < secretNumber) {
+                    System.out.println(" Too low!");
+                } else {
+                    System.out.println(" Too high!");
+                }
+
+                attemptsLeft--;
+                System.out.println("Attempts left: " + attemptsLeft);
+            }
+
+            if (!guessedCorrectly) {
+                System.out.println("❌ You're out of attempts! The number was: " + secretNumber);
+            }
+
+            System.out.println("🏆 Current Score: " + score + " out of " + roundsPlayed + " rounds");
+
+            System.out.print("Do you want to play another round? (yes/no): ");
+            scanner.nextLine(); // clear buffer
+            playAgain = scanner.nextLine().trim().toLowerCase();
+
+        } while (playAgain.equals("yes") || playAgain.equals("y"));
+
+        System.out.println("\nThanks for playing!");
+        System.out.println("🎯 Final Score: " + score + " out of " + roundsPlayed + " rounds");
+
+        scanner.close();
+    }
+}
